@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<title>24 Hour Planner</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no" />
+	
+	<style>
+	 body {
+	     font-family: Roboto, Arial, serif;
+	 }
+	 #planner {
+	     max-width: 500px;
+	     margin: 0 auto;
+	 }
+	 #planner-list {
+	     list-style: none;
+	     padding-left: 0;
+	 }
+	 #input-box {
+	     display: flex;
+	     flex-direction: row;
+	     flex-wrap: wrap;
+	     gap: 1em;
+	     justify-content: center;
+	     border-radius: 1em;
+	     padding: 0.5em;
+	     border: 2px lightgrey solid;
+	 }
+	 .task {
+	     display: flex;
+	     flex-direction: row;
+	     align-items: center;
+	     justify-content: space-between;
+	     gap: 1em;
+	     padding: 0 1em;
+	 }
+	 .task { background: white; }
+	 .task:nth-child(odd) { background: lightgrey; }
+	</style>
+    </head>
+    <body>
+	<div id="planner">
+	    <h1>24 Hour Planner</h1>
+	    <h4 id="percent-planned">0% Planned</h4>
+	    <ul id="planner-list">
+	    </ul>
+	    <div id="input-box">
+		<input type="text" id="start-time" placeholder="Start Time">
+		<input type="text" id="end-time" placeholder="End Time">
+		<input type="text" id="task" placeholder="Enter Task Here">
+		<button onclick="addTask()">Submit</button>
+	    </div>
+
+	</div>
+	 <script>
+	  let tasks = [];
+	  let minTime = new Date();
+	  minTime.setHours(0, 0, 0);
+	  let maxTime = new Date();
+	  maxTime.setHours(23, 59, 0);
+	  if(localStorage.getItem("tasks")){
+	      tasks = JSON.parse(localStorage.getItem("tasks"));
+	      for(let i=0; i<tasks.length; i++){
+		  tasks[i].startTime = new Date(tasks[i].startTime);
+		  tasks[i].endTime = new Date(tasks[i].endTime);
+	      }
+	      sortTasks();
+	      calculatePercent();
+	  }
+	  function addTask() {
+	      const startTime = document.getElementById("start-time").value; 
+	      const endTime = document.getElementById("end-time").value;
+	      const startTimeD = new Date();
+	      startTimeD.setHours(startTime.split(":")[0],startTime.split(":")[1],0);
+	      const endTimeD = new Date();
+	      endTimeD.setHours(endTime.split(":")[0],endTime.split(":")[1],0);
+	      if(!checkRange(startTimeD, endTimeD)){
+		  return;
+	      }
+	      const task = document.getElementById("task").value;
+	      tasks.push({
+		  startTime: startTimeD,
+		  endTime: endTimeD,
+		  task: task,
+	      });
+	      sortTasks();
+	      saveTasks();
+	      calculatePercent();
+	  }
+	  function sortTasks(){
+	      document.getElementById("planner-list").innerHTML = "";
+	      if(tasks.length > 1){
+		  for(let i=tasks.length-2; i>=0; i--){
+		      if(tasks[i].startTime > tasks[i+1].endTime){
+			  tasks[i] = tasks.splice((i + 1), 1, tasks[i])[0];
+		      }
+		  }
+	      }
+	      for(let i=0; i<tasks.length; i++){
+		  const task = tasks[i];
+		  const li = document.createElement("li");
+		  li.id = "task-" + i;
+		  li.className = "task";
+		  const p = document.createElement("p");
+		  p.innerText = ("0000" + task.startTime.getHours()).slice(-2) + ":" + ("0000" + task.startTime.getMinutes()).slice(-2) + "-" + ("0000" + task.endTime.getHours()).slice(-2) + ":" + ("0000" + task.endTime.getMinutes()).slice(-2) + ": " + task.task;
+		  li.appendChild(p);
+		  const deleteBtn = document.createElement("button");
+		  deleteBtn.innerText = "Delete";
+		  deleteBtn.setAttribute("onclick", "deleteTask(" + i + ")");
+		  li.appendChild(deleteBtn);
+		  document.getElementById("planner-list").appendChild(li);
+	      }
+	  }
+	  function deleteTask(i) {
+	      tasks = tasks.slice(0, i).concat(tasks.slice(i + 1));
+	      sortTasks();
+	      saveTasks();
+	      calculatePercent();
+	  }
+	  function saveTasks() {
+	      localStorage.setItem("tasks", JSON.stringify(tasks));
+	  }
+	  function checkRange(startTime, endTime) {
+	      //TODO sanitize inputs
+	      if(startTime > endTime){
+		  alert("Please make sure your start time is less than your end time.")
+		  return false;
+	      }
+	      if(endTime > maxTime && startTime < minTime){
+		  alert("Please choose a time range between 00:00 and 23:59.")
+		  return false;
+	      }
+	      for(let i=0; i<Object.keys(tasks).length; i++){
+		  let task = tasks[i];
+		  if(!(endTime > startTime && (endTime <= task.startTime || startTime >= task.endTime))){
+		      alert("There is already a task in this time period.");
+		      return false;
+		  }
+	      }
+	      return true; 
+	  }
+	  function calculatePercent() {
+	      let percent = 0;
+	      for(let i=0; i<Object.keys(tasks).length; i++){
+		  let task = tasks[i];
+		  percent += ((task.endTime - task.startTime) / (maxTime - minTime)) * 100;
+	      }
+	      document.getElementById("percent-planned").innerText = Math.ceil(percent) + "% Planned";
+	      if(percent > 90)
+		  document.getElementById("percent-planned").style.color = "green";
+	      else
+		  document.getElementById("percent-planned").style.color = "black";
+	  }
+	 </script>
+    </body>
+</html>
