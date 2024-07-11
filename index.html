@@ -1,41 +1,210 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
-	<title></title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, user-scalable=no" />
-	<style>
-	 body {
-	     font-family: Roboto, Arial, Helvetica, sans-serif;
-	     max-width: 700px;
-	     margin: 0 auto;
-	     line-height: 1.5;
-	     padding: 0.5em;
-	 }
-	 header {
-	     display: flex;
-	     flex-direction: row;
-	     align-items: center;
-	     justify-content: space-between;
-	 }
-	 nav {
-	     display: flex;
-	     flex-direction: row;
-	     align-items: center;
-	     gap: 0.5em;
-	     flex-wrap: wrap;
-	 }
-	</style>
+        <title>Berendt Software</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            html,
+            body {
+                font-family: Roboto, Arial, Helvetica, sans-serif;
+                max-width: 500px;
+                line-height: 1.6;
+                margin: 0 auto;
+                padding: 4em 1em;
+                overflow-x: hidden;
+            }
+            p,
+            a {
+                font-size: 1.2rem;
+            }
+            #profile-picture {
+                position: relative;
+                width: 10em;
+                height: 10em;
+                border-radius: 50%;
+                border: double lightgrey 10px;
+            }
+            header {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            #projects > div {
+                width: 100%;
+                margin-top: 0.5em;
+                padding: 0 1em;
+                border-radius: 1em;
+                border: solid 4px;
+            }
+            .badge-container {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 0.5em;
+                margin: 1em 0em;
+            }
+            .badge-container > span {
+                padding: 0.2em 0.5em;
+                border-radius: 1em;
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+
+            .slider {
+                width: 100%;
+                text-align: center;
+                overflow: hidden;
+            }
+
+            .slides {
+                display: flex;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+            }
+            .slides::-webkit-scrollbar {
+                width: 10px;
+                height: 10px;
+            }
+            .slides::-webkit-scrollbar-thumb {
+                background: black;
+                border-radius: 10px;
+            }
+            .slides::-webkit-scrollbar-track {
+                background: transparent;
+            }
+            .slides > div {
+                scroll-snap-align: start;
+                flex-shrink: 0;
+                width: 100%;
+                height: 220px;
+                margin-right: 50px;
+                border-radius: 10px;
+                background: #eee;
+                transform-origin: center center;
+                transform: scale(1);
+                transition: transform 0.5s;
+                position: relative;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 100px;
+            }
+            img {
+                object-fit: cover;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+        </style>
     </head>
     <body>
-	<header>
-	    <h1>Jack Berendt</h1>
-	    <nav>
-		<a href="/">Home</a>
-		<a href="https://github.com/jrberendt">GitHub</a>
-	    </nav>
-	</header>
-	<h1>Devlog</h1>
-    <p>Tuesday June 18th, 2024: Resumed work on <a href="https://github.com/jrberendt/recursive">Recursive</a>, a static site generator for Common Lisp.</p>
+        <header>
+            <div id="profile-picture"><img src="img/profilepic.png" style="border-radius: 50%"></div>
+            <div>
+                <h1>Berendt Software</h1>
+                <p>By Jack Berendt<br/>
+                <a href="mailto:jrberendt@gmail.com"> Contact ✉️ </a>
+                </p>
+            </div>
+        </header>
+        <section id="about">
+            <h3>About</h3>
+            <p>
+                Hello! I'm Jack, a software developer and maker mainly focused
+                on fullstack web development and designing websites that are
+                fast, intuitive, and add significant value to your business.
+            </p>
+            <p>
+                Today, the web is filled with AI-generated content and websites
+                that are designed to make the owners as much money as possible
+                without any regard to the user. This isn't the way the Web was
+                meant to be, and I would like to help make the Web a better
+                place.
+            </p>
+        </section>
+        <section id="services">
+            <h3>Services</h3>
+            <p>
+                I can
+                <b>design websites and code backends, APIs, and integrations</b
+                >. Most importantly, I can think creatively and use the Internet
+                and other resources to
+                <b>improve the Internet-facing side of your business</b>,
+                whether that is a simple landing page or a complex SaaS
+                application.
+            </p>
+        </section>
+        <section id="past-projects">
+            <h3>Past Projects</h3>
+            <div id="projects">
+                <div style="border-color: tomato">
+                    <h2>Turbolink</h2>
+                    <p>
+                        A link-sharing platform, like Gumroad or Linktree.
+                        Enabled users to shorten, paywall or password-protect
+                        their links and share them with others.
+                    </p>
+
+                    <div class="slider">
+                        <div class="slides">
+                            <div><img src="img/turbolink1.png" /></div>
+                            <div><img src="img/turbolink2.png" /></div>
+                            <div><img src="img/turbolink3.png" /></div>
+                            <div><img src="img/turbolink4.png" /></div>
+                            <div><img src="img/turbolink5.png" /></div>
+                        </div>
+                    </div>
+                    <div class="badge-container">
+                        <span style="background-color: tomato">Svelte</span>
+                        <span style="background-color: green; color: white">
+                            Supabase
+                        </span>
+                    </div>
+                </div>
+                <div style="border-color: lightblue">
+                    <h2>GoodSchool</h2>
+                    <p>
+                        A simple online classroom built with Firebase and React.
+                    </p>
+                    <div class="slider">
+                        <div class="slides">
+                            <div><img src="img/goodschool1.png" /></div>
+                            <div><img src="img/goodschool2.png" /></div>
+                            <div><img src="img/goodschool3.png" /></div>
+                        </div>
+                    </div>
+
+                    <div class="badge-container">
+                        <span style="background-color: lightblue">React</span>
+                        <span style="background-color: orange">Firebase</span>
+                    </div>
+                </div>
+                <div style="border-color: lightgreen">
+                    <h2>Bike Computer</h2>
+                    <p>
+                        An app that displays ride information, such as speed,
+                        location, mileage, and total time.
+                        <a href="img/bikecomputer.jpg">Screenshot</a>
+                    </p>
+
+                    <div class="badge-container">
+                        <span style="background-color: lightblue"
+                            >React Native</span
+                        >
+                        <span style="background-color: black; color: white"
+                            >Expo</span
+                        >
+                    </div>
+                </div>
+            </div>
     </body>
 </html>
